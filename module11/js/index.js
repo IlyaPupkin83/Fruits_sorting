@@ -44,8 +44,10 @@ const display = () => {
 		let Div_color = document.createElement("div");
 		let Div_weight = document.createElement("div");
 
-		Div_fruitInfo.className = "";
-
+		// create className
+		let className = ['violet', 'green', 'carmazin', 'yellow', 'lightbrown'];
+		newLi.className = `fruit__item fruit_${className[i]}`;
+		Div_fruitInfo.className = "fruit__info";
 
 		// add the values
 		Div_index.appendChild(document.createTextNode(`index: ${i}`));
@@ -60,15 +62,12 @@ const display = () => {
 		newDiv.appendChild(Div_kind);
 		newDiv.appendChild(Div_color);
 		newDiv.appendChild(Div_weight);
-
-
-		newDiv
 	}
 };
 
 // первая отрисовка карточек
 display();
-console.log(fruitsList);
+
 /*** ПЕРЕМЕШИВАНИЕ ***/
 
 // генерация случайного числа в заданном диапазоне
@@ -79,19 +78,23 @@ const getRandomInt = (min, max) => {
 // перемешивание массива
 const shuffleFruits = () => {
 	let result = [];
-
-	// ATTENTION: сейчас при клике вы запустите бесконечный цикл и браузер зависнет
 	while (fruits.length > 0) {
 		// TODO: допишите функцию перемешивания массива
-		//
-		// Подсказка: находим случайный элемент из fruits, используя getRandomInt
+		// находим случайный элемент из fruits, используя getRandomInt
+		let randomIndex = getRandomInt(0, fruits.length);
+		let randomElement = fruits.splice(randomIndex - 1, 1);
+		result.push(randomElement[0]);
 		// вырезаем его из fruits и вставляем в result.
 		// ex.: [1, 2, 3], [] => [1, 3], [2] => [3], [2, 1] => [], [2, 1, 3]
 		// (массив fruits будет уменьшатся, а result заполняться)
-	}
-
+	};
 	fruits = result;
-};
+	return fruits;
+}
+
+//shuffleFruits();
+//console.log(fruits);
+//fruits.shuffleFruits();
 
 shuffleButton.addEventListener('click', () => {
 	shuffleFruits();
