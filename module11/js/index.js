@@ -158,31 +158,30 @@ let fruitsHSLtoColor = () => {
 
 const comparationColor = (fruitColor1, fruitColor2) => {
 	// TODO: допишите функцию сравнения двух элементов по цвету
-	fruitsHSL();
 	return (parseInt(fruitColor1) > parseInt(fruitColor2)) ? true : false;
 };
 
 // функция обмена элементов
-function swap(items, firstIndex, secondIndex) {
-	const temp = items[firstIndex];
-	items[firstIndex] = items[secondIndex];
-	items[secondIndex] = temp;
+function swap(fruits, firstIndex, secondIndex) {
+	const temp = fruits[firstIndex];
+	fruits[firstIndex] = fruits[secondIndex];
+	fruits[secondIndex] = temp;
 }
 
 // функция разделитель
-function partition(items, left, right) {
-	let pivot = items[Math.floor((right + left) / 2)],
-		i = left,
-		j = right;
+function partition(fruits, left, right) {
+	let pivot = parseInt(fruits[Math.floor((right + left) / 2)].color);
+	i = left;
+	j = right;
 	while (i <= j) {
-		while (items[i] < pivot) {
+		while (fruits[i].color < pivot) {
 			i++;
 		}
-		while (items[j] > pivot) {
+		while (fruits[j].color > pivot) {
 			j--;
 		}
 		if (i <= j) {
-			swap(items, i, j);
+			swap(fruits, i, j);
 			i++;
 			j--;
 		}
@@ -190,9 +189,26 @@ function partition(items, left, right) {
 	return i;
 }
 
+function quickSort(fruits, left, right) {
+	let index;
+	if (fruits.length > 1) {
+		left = typeof left != "number" ? 0 : left;
+		right = typeof right != "number" ? fruits.length - 1 : right;
+		index = partition(fruits, left, right);
+		if (left < index - 1) {
+			quickSort(fruits, left, index - 1);
+		}
+		if (index < right) {
+			quickSort(fruits, index, right);
+		}
+	}
+	return fruits;
+};
+
 const sortAPI = {
 	bubbleSort(fruits, comparationColor) {
 		// TODO: допишите функцию сортировки пузырьком
+		fruitsHSL();
 		const n = fruits.length;
 		// внешняя итерация по элементам
 		for (let i = 0; i < n - 1; i++) {
@@ -210,29 +226,23 @@ const sortAPI = {
 		fruitsHSLtoColor();
 	},
 
-	quickSort(fruits, comparationColor) {
-		// TODO: допишите функцию быстрой сортировки
-
-		// алгоритм быстрой сортировки
-		function quickSort(items, left, right) {
-			let index;
-			if (items.length > 1) {
-				left = typeof left != "number" ? 0 : left;
-				right = typeof right != "number" ? items.length - 1 : right;
-				index = partition(items, left, right);
-				if (left < index - 1) {
-					quickSort(items, left, index - 1);
-				}
-				if (index < right) {
-					quickSort(items, index, right);
-				}
+	// алгоритм быстрой сортировки
+	quickSort(fruits, left, right) {
+		fruitsHSL();
+		let index;
+		if (fruits.length > 1) {
+			left = typeof left != "number" ? 0 : left;
+			right = typeof right != "number" ? fruits.length - 1 : right;
+			index = partition(fruits, left, right);
+			if (left < index - 1) {
+				quickSort(fruits, left, index - 1);
 			}
-			return items;
+			if (index < right) {
+				quickSort(fruits, index, right);
+			}
 		}
-
-
-
-
+		fruitsHSLtoColor();
+		return fruits;
 	},
 
 	// выполняет сортировку и производит замер времени
@@ -269,5 +279,10 @@ sortActionButton.addEventListener('click', () => {
 addActionButton.addEventListener('click', () => {
 	// TODO: создание и добавление нового фрукта в массив fruits
 	// необходимые значения берем из kindInput, colorInput, weightInput
-	display();
+	if ((kindInput.value === '') || (colorInput.value === '') || (weightInput.value === '')) {
+		alert('Одно из полей пустое!');
+	} else {
+		fruits[fruits.length] = { kind: `${kindInput.value}`, color: `${colorInput.value}`, weight: `${weightInput.value}` }
+		display();
+	}
 });
